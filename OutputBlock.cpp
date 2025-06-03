@@ -1,0 +1,39 @@
+#include "OutputBLock.hpp"
+
+void OutputBlock::saveImage() {
+	if (in && !filePath.empty()) {
+		try {
+			ExportImage(*in, filePath.c_str());
+		}
+		catch (...) {
+
+		}
+	}
+}
+
+OutputBlock::OutputBlock(std::shared_ptr<Image> input, const std::string fileName) {
+	out = nullptr;
+	filePath = fileName;
+	in = input;
+}
+OutputBlock::~OutputBlock() = default;
+
+void OutputBlock::setInput(std::shared_ptr<Image> input) {
+	in = input;
+	if (in) {
+		image = ImageCopy(*in);
+		out = nullptr;
+	}
+}
+void OutputBlock::process() {
+	saveImage();
+}
+
+void OutputBlock::setFilePath(const std::string& path) {
+	filePath = path;
+}
+
+std::shared_ptr<Image> OutputBlock::getOutput() {
+	saveImage();
+	return nullptr;
+}
