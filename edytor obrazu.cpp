@@ -16,9 +16,9 @@ int main() {
 	SetTargetFPS(60);
 
 	std::vector<BlockWrapper> blocks;
+	BlockWrapper* selectedBlock = nullptr;
 	std::vector<Connection> connections;
 	std::shared_ptr<BasicBlock> connectionStart = nullptr;
-	BlockWrapper* selectedBlock = nullptr;
 
 	BlockType draggingType = BlockType::None;
 	bool dragging = false;
@@ -52,7 +52,7 @@ int main() {
 			case BlockType::Sobel: newBlock = std::make_shared<SobelFilterBlock>(nullptr, 100, true); break;
 			case BlockType::Laplacian: newBlock = std::make_shared<LaplacianFilterBlock>(nullptr, false); break;
 			case BlockType::Median: newBlock = std::make_shared<MedianFilterBlock>(nullptr, 3); break;
-			case BlockType::Gaussian: newBlock = std::make_shared<GaussianFilterBlock>(nullptr, 3,1); break;
+			case BlockType::Gaussian: newBlock = std::make_shared<GaussianFilterBlock>(nullptr, 3, 1); break;
 			default: break;
 			}
 
@@ -71,16 +71,19 @@ int main() {
 		for (auto& bw : blocks) {
 			bw.block->Draw();
 
-			/*// Wybór aktywnego bloku
+			// Wybór aktywnego bloku
 			if (CheckCollisionPointRec(GetMousePosition(), { bw.block->GetInputPos().x, bw.block->GetInputPos().y - 20, 150, 80 })) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 					selectedBlock = &bw;
 				}
 			}
+		}
+
+		for (auto& block : blocks) {
 			Vector2 mouse = GetMousePosition();
 
 			// Kliknięcie wyjścia: start połączenia
-			if (CheckCollisionPointCircle(mouse, bw->GetOutputPos(), 6)) {
+			if (CheckCollisionPointCircle(mouse, block.block->GetOutputPos(), 6)) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 					connectionStart = block.block;
 				}
@@ -94,7 +97,23 @@ int main() {
 					block.block->setInput(connectionStart->getOutput());
 					connectionStart = nullptr;
 				}
-			}*/
+			}
+
+			if (connectionStart) {
+				DrawLineBezier(
+					connectionStart->GetOutputPos(),
+					GetMousePosition(),
+					2.0f, MAROON
+				);
+			}
+		}
+
+		for (const auto& conn : connections) {
+			DrawLineBezier(
+				conn.from->GetOutputPos(),
+				conn.to->GetInputPos(),
+				2.0f, DARKBLUE
+			);
 		}
 
 		// Panel parametrów
@@ -160,7 +179,7 @@ int main() {
 					int size = median->getSize();
 					float sizebuf;
 					size = GuiSlider({ 1110, (float)y, 20, 20 }, "Size", " ", &sizebuf, 0, 100);
-					median->SetSize(3+static_cast<int>(sizebuf/100*8));
+					median->SetSize(3 + static_cast<int>(sizebuf / 100 * 8));
 				}
 			} break;
 
@@ -172,8 +191,8 @@ int main() {
 					float sigma = gauss->getSigma();
 					size = GuiSlider({ 1110, (float)y, 20, 20 }, "Size", " ", &sizebuf, 0, 100);
 					sigma = GuiSlider({ 1110, (float)y, 40, 20 }, "Sigma", " ", &sigma, 0, 100);
-					gauss->setSize(3+static_cast<int>(sizebuf/100*8));
-					gauss->setSigma(sigma/20);
+					gauss->setSize(3 + static_cast<int>(sizebuf / 100 * 8));
+					gauss->setSigma(sigma / 20);
 				}
 			} break;
 
