@@ -1,6 +1,6 @@
 #include "SobelFilterBlock.hpp"
 
-SobelFilterBlock::SobelFilterBlock(std::shared_ptr<Image> input, int thresh): edgeThresh(thresh){
+SobelFilterBlock::SobelFilterBlock(std::shared_ptr<Image> input, int thresh, bool white): edgeThresh(thresh), bw(white){
 		in = input;
 		image = ImageCopy(*in);
 		out = nullptr;
@@ -16,7 +16,7 @@ SobelFilterBlock::~SobelFilterBlock() = default;
 	void SobelFilterBlock::process() {
 		if (in) {
 			image = ImageCopy(*in);
-			sobel();
+			std::jthread(&SobelFilterBlock::sobel,this);
 			out = std::make_shared<Image>(image);
 		}
 	}
@@ -45,7 +45,6 @@ SobelFilterBlock::~SobelFilterBlock() = default;
 
 			try {
 				ImageFormat(&image, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
-				//throw 404;
 			}
 			catch (int errorCode) {
 				image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
@@ -76,7 +75,11 @@ SobelFilterBlock::~SobelFilterBlock() = default;
 				}
 				float phi = atan2(gy, gx);
 				float g = sqrt(pow(gx, 2) + pow(gy, 2));
-				unsigned char g_val = (unsigned char)std::clamp(255.0f - g, 0.0f, 255.0f);
+				unsigned char g_val;
+				if(bw)
+					g_val = (unsigned char)std::clamp(255.0f - g, 0.0f, 255.0f);
+				else
+					g_val = (unsigned char)std::clamp(g, 0.0f, 255.0f);
 				output[y * width + x] = { g_val,g_val,g_val,255 };
 			}
 		}

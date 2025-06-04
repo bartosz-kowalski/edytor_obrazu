@@ -16,7 +16,7 @@ void GaussianFilterBlock::setInput(std::shared_ptr<Image> input) {
 void GaussianFilterBlock::process() {
 	if (in) {
 		image = ImageCopy(*in);
-		gaussian();
+		std::jthread(&GaussianFilterBlock::gaussian, this);
 		out = std::make_shared<Image>(image);
 	}
 }

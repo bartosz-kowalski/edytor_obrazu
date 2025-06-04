@@ -1,7 +1,7 @@
 #include "OutputBLock.hpp"
 
 void OutputBlock::saveImage() {
-	if (in && !filePath.empty()) {
+	if (in!=nullptr && !filePath.empty()) {
 		try {
 			ExportImage(*in, filePath.c_str());
 		}

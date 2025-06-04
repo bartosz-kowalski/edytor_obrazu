@@ -7,15 +7,15 @@ private:
 
 	void saveImage();
 public:
-	OutputBlock(std::shared_ptr<Image> input, const std::string fileName);
+	OutputBlock(std::shared_ptr<Image>, const std::string);
 
 	~OutputBlock() override;
 
-	void setInput(std::shared_ptr<Image> input) override;
+	void setInput(std::shared_ptr<Image>) override;
 
 	void process() override;
 
-	void setFilePath(const std::string& path);
+	void setFilePath(const std::string&);
 
 	std::shared_ptr<Image> getOutput() override;
 };

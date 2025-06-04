@@ -5,11 +5,11 @@ class MedianFilterBlock : public BasicBlock {
 private:
 	int filterSize = 5;
 public:
-	MedianFilterBlock(std::shared_ptr<Image> input, int f_size);
+	MedianFilterBlock(std::shared_ptr<Image>, int);
 
 	~MedianFilterBlock() override;
 
-	void setInput(std::shared_ptr<Image> input) override;
+	void setInput(std::shared_ptr<Image>) override;
 
 	void process() override;
 

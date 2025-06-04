@@ -7,11 +7,11 @@ private:
 
 	float sigma = 3;
 public:
-	GaussianFilterBlock(std::shared_ptr<Image> input, int f_size, float sigma);
+	GaussianFilterBlock(std::shared_ptr<Image>, int, float);
 
 	~GaussianFilterBlock() override;
 
-	void setInput(std::shared_ptr<Image> input) override;
+	void setInput(std::shared_ptr<Image>) override;
 
 	void process() override;
 

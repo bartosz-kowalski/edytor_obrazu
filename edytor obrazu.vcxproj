@@ -136,23 +136,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="edytor obrazu.cpp" />
-    <ClCompile Include="GaussianFilterBlock.cpp" />
-    <ClCompile Include="ImageAddBlock.cpp" />
-    <ClCompile Include="InputBlock.cpp" />
-    <ClCompile Include="LaplacianFilterBlock.cpp" />
-    <ClCompile Include="MedianFilterBlock.cpp" />
-    <ClCompile Include="OutputBlock.cpp" />
-    <ClCompile Include="SobelFilterBlock.cpp" />
+    <ClCompile Include="zaleznosci\BasicBlock.cpp" />
+    <ClCompile Include="zaleznosci\GaussianFilterBlock.cpp" />
+    <ClCompile Include="zaleznosci\ImageAddBlock.cpp" />
+    <ClCompile Include="zaleznosci\InputBlock.cpp" />
+    <ClCompile Include="zaleznosci\LaplacianFilterBlock.cpp" />
+    <ClCompile Include="zaleznosci\MedianFilterBlock.cpp" />
+    <ClCompile Include="zaleznosci\OutputBlock.cpp" />
+    <ClCompile Include="zaleznosci\SobelFilterBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicBlock.hpp" />
-    <ClInclude Include="GaussianFilterBlock.hpp" />
-    <ClInclude Include="ImageAddBlock.hpp" />
-    <ClInclude Include="InputBlock.hpp" />
-    <ClInclude Include="LaplacianFilterBlock.hpp" />
-    <ClInclude Include="MedianFilterBlock.hpp" />
-    <ClInclude Include="OutputBLock.hpp" />
-    <ClInclude Include="SobelFilterBlock.hpp" />
+    <ClInclude Include="zaleznosci\BasicBlock.hpp" />
+    <ClInclude Include="zaleznosci\GaussianFilterBlock.hpp" />
+    <ClInclude Include="zaleznosci\ImageAddBlock.hpp" />
+    <ClInclude Include="zaleznosci\InputBlock.hpp" />
+    <ClInclude Include="zaleznosci\LaplacianFilterBlock.hpp" />
+    <ClInclude Include="zaleznosci\MedianFilterBlock.hpp" />
+    <ClInclude Include="zaleznosci\OutputBLock.hpp" />
+    <ClInclude Include="zaleznosci\SobelFilterBlock.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

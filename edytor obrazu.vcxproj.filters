@@ -18,51 +18,54 @@
     <ClCompile Include="edytor obrazu.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="InputBlock.cpp">
+    <ClCompile Include="zaleznosci\BasicBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="OutputBlock.cpp">
+    <ClCompile Include="zaleznosci\GaussianFilterBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="MedianFilterBlock.cpp">
+    <ClCompile Include="zaleznosci\ImageAddBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="GaussianFilterBlock.cpp">
+    <ClCompile Include="zaleznosci\InputBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="SobelFilterBlock.cpp">
+    <ClCompile Include="zaleznosci\LaplacianFilterBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="LaplacianFilterBlock.cpp">
+    <ClCompile Include="zaleznosci\MedianFilterBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
-    <ClCompile Include="ImageAddBlock.cpp">
+    <ClCompile Include="zaleznosci\OutputBlock.cpp">
+      <Filter>Pliki zasobów</Filter>
+    </ClCompile>
+    <ClCompile Include="zaleznosci\SobelFilterBlock.cpp">
       <Filter>Pliki zasobów</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicBlock.hpp">
+    <ClInclude Include="zaleznosci\BasicBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="InputBlock.hpp">
+    <ClInclude Include="zaleznosci\GaussianFilterBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="OutputBLock.hpp">
+    <ClInclude Include="zaleznosci\ImageAddBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="MedianFilterBlock.hpp">
+    <ClInclude Include="zaleznosci\InputBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="GaussianFilterBlock.hpp">
+    <ClInclude Include="zaleznosci\LaplacianFilterBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="SobelFilterBlock.hpp">
+    <ClInclude Include="zaleznosci\MedianFilterBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="LaplacianFilterBlock.hpp">
+    <ClInclude Include="zaleznosci\OutputBLock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="ImageAddBlock.hpp">
+    <ClInclude Include="zaleznosci\SobelFilterBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

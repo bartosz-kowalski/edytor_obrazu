@@ -9,13 +9,13 @@ private:
 
 	void loadImage();
 public:
-	InputBlock(const std::string& name);
+	InputBlock(const std::string&);
 
 	~InputBlock() override;
 
-	void setInput(std::shared_ptr<Image> input) override;
+	void setInput(std::shared_ptr<Image>) override;
 
-	void setFileName(const std::string& name);
+	void setFileName(const std::string&);
 
 	void process() override;
 

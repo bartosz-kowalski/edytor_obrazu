@@ -5,11 +5,11 @@ class LaplacianFilterBlock : public BasicBlock {
 private:
 	bool negative;
 public:
-	LaplacianFilterBlock(std::shared_ptr<Image> input, bool negative);
+	LaplacianFilterBlock(std::shared_ptr<Image>, bool);
 
 	~LaplacianFilterBlock() override;
 
-	void setInput(std::shared_ptr<Image> input) override;
+	void setInput(std::shared_ptr<Image>) override;
 
 	void process() override;
 
