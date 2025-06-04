@@ -16,4 +16,8 @@ public:
 	std::shared_ptr<Image> getOutput() override;
 
 	void median();
+
+	void SetSize(int);
+
+	int getSize();
 };

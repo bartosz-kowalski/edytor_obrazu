@@ -2,21 +2,21 @@
 
 MedianFilterBlock::MedianFilterBlock(std::shared_ptr<Image> input, int f_size) : filterSize(f_size) {
 	in = input;
-	image = ImageCopy(*in);
+	//image = ImageCopy(*in);
 	out = nullptr;
 }
 MedianFilterBlock::~MedianFilterBlock() = default;
 void MedianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	in = input;
 	if (in) {
-		image = ImageCopy(*in);
+		//image = ImageCopy(*in);
 		out = nullptr;
 	}
 }
 void MedianFilterBlock::process() {
 	if (in) {
 		image = ImageCopy(*in);
-		std::jthread(&MedianFilterBlock::median, this);
+		median();
 		out = std::make_shared<Image>(image);
 	}
 }
@@ -71,4 +71,15 @@ void MedianFilterBlock::median() {
 	image.data = output;
 	image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 	image.mipmaps = 1;
+}
+
+void MedianFilterBlock::SetSize(int size) {
+	if (size % 2 != 0)
+		filterSize = size;
+	else
+		filterSize = 5;
+}
+
+int MedianFilterBlock::getSize() {
+	return filterSize;
 }

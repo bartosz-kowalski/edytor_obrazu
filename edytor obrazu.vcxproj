@@ -154,6 +154,7 @@
     <ClInclude Include="zaleznosci\MedianFilterBlock.hpp" />
     <ClInclude Include="zaleznosci\OutputBLock.hpp" />
     <ClInclude Include="zaleznosci\SobelFilterBlock.hpp" />
+    <ClInclude Include="zaleznosci\utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

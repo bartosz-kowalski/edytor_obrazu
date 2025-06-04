@@ -2,7 +2,7 @@
 
 LaplacianFilterBlock::LaplacianFilterBlock(std::shared_ptr<Image> input, bool positive) : negative(positive) {
 	in = input;
-	image = ImageCopy(*in);
+	//image = ImageCopy(*in);
 	out = nullptr;
 }
 LaplacianFilterBlock::~LaplacianFilterBlock() = default;
@@ -10,14 +10,14 @@ LaplacianFilterBlock::~LaplacianFilterBlock() = default;
 void LaplacianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	in = input;
 	if (in) {
-		image = ImageCopy(*in);
+		//image = ImageCopy(*in);
 		out = nullptr;
 	}
 }
 void LaplacianFilterBlock::process() {
 	if (in) {
 		image = ImageCopy(*in);
-		std::jthread(&LaplacianFilterBlock::laplacian, this);
+		laplacian();
 		out = std::make_shared<Image>(image);
 	}
 }
@@ -29,7 +29,7 @@ void LaplacianFilterBlock::laplacian() {
 
 	int width = image.width;
 	int height = image.height;
-	int k = 3/2;
+	int k = 3 / 2;
 	std::vector<std::vector<int>> kernel;
 
 	if (negative) {
@@ -93,4 +93,12 @@ void LaplacianFilterBlock::laplacian() {
 	image.data = output;
 	image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 	image.mipmaps = 1;
+}
+
+void LaplacianFilterBlock::setNeg(bool neg) {
+	negative = neg;
+}
+
+bool LaplacianFilterBlock::getNeg() {
+	return negative;
 }

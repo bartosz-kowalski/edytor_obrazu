@@ -17,4 +17,13 @@ public:
 	std::shared_ptr<Image> getOutput() override;
 
 	void sobel();
+
+	bool getBW();
+
+	void setBW(bool);
+
+	int getThresh();
+
+	void setThresh(int);
+
 };

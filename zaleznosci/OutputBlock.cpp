@@ -21,7 +21,7 @@ OutputBlock::~OutputBlock() = default;
 void OutputBlock::setInput(std::shared_ptr<Image> input) {
 	in = input;
 	if (in) {
-		image = ImageCopy(*in);
+		//image = ImageCopy(*in);
 		out = nullptr;
 	}
 }

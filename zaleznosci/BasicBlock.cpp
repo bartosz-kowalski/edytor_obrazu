@@ -32,3 +32,7 @@ void BasicBlock::Draw() {
         }
     }
 }
+
+void BasicBlock::setPosition(Vector2 pos) {
+    position = pos;
+}

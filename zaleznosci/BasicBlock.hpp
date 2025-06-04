@@ -38,6 +38,8 @@ public:
 
 	virtual void Draw();
 
+	virtual void setPosition(Vector2);
+
     Vector2 GetInputPos() const;
 
     Vector2 GetOutputPos() const; 

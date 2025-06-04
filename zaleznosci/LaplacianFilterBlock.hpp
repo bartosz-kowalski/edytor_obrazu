@@ -17,4 +17,8 @@ public:
 
 	void laplacian();
 
+	void setNeg(bool);
+
+	bool getNeg();
+
 };

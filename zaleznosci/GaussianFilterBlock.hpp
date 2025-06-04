@@ -20,4 +20,12 @@ public:
 	std::vector<std::vector<float>> generateKernel();
 
 	void gaussian();
+
+	float getSigma();
+
+	void setSigma(float);
+
+	int getSize();
+
+	void setSize(int);
 };

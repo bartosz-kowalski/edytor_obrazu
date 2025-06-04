@@ -68,5 +68,8 @@
     <ClInclude Include="zaleznosci\SobelFilterBlock.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="zaleznosci\utils.hpp">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,21 +2,21 @@
 
 GaussianFilterBlock::GaussianFilterBlock(std::shared_ptr<Image> input, int f_size, float sigma) : filterSize(f_size), sigma(sigma) {
 	in = input;
-	image = ImageCopy(*in);
+	//image = ImageCopy(*in);
 	out = nullptr;
 }
 GaussianFilterBlock::~GaussianFilterBlock() = default;
 void GaussianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	in = input;
 	if (in) {
-		image = ImageCopy(*in);
+		//image = ImageCopy(*in);
 		out = nullptr;
 	}
 }
 void GaussianFilterBlock::process() {
 	if (in) {
 		image = ImageCopy(*in);
-		std::jthread(&GaussianFilterBlock::gaussian, this);
+		gaussian();
 		out = std::make_shared<Image>(image);
 	}
 }
@@ -101,4 +101,23 @@ void GaussianFilterBlock::gaussian() {
 	image.data = output;
 	image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 	image.mipmaps = 1;
+}
+
+float GaussianFilterBlock::getSigma() {
+	return sigma;
+}
+
+void GaussianFilterBlock::setSigma(float s) {
+	sigma = s;
+}
+
+int GaussianFilterBlock::getSize() {
+	return filterSize;
+}
+
+void GaussianFilterBlock::setSize(int size) {
+	if (size % 2 != 0)
+		filterSize = size;
+	else
+		size = 5;
 }
