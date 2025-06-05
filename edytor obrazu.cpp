@@ -29,7 +29,6 @@ int main() {
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
-		// Pasek narzędzi
 		DrawRectangle(0, 0, 140, GetScreenHeight(), LIGHTGRAY);
 		DrawText("BLOKI", 10, 10, 20, DARKGRAY);
 
@@ -58,20 +57,18 @@ int main() {
 
 			if (newBlock) {
 				newBlock->setInput(nullptr);
-				//newBlock->process();
 				blocks.push_back({ newBlock, draggingType });
 				newBlock->setPosition(pos);
-				newBlock->Draw();  // pozycja ustawiana przez użytkownika w drag
+				newBlock->Draw();
+				newBlock->setIdx(static_cast<int>(blocks.size())-1);
 			}
 
 			draggingType = BlockType::None;
 		}
 
-		// Rysowanie i wybór bloków
 		for (auto& bw : blocks) {
 			bw.block->Draw();
 
-			// Wybór aktywnego bloku
 			if (CheckCollisionPointRec(GetMousePosition(), { bw.block->GetInputPos().x, bw.block->GetInputPos().y - 20, 150, 80 })) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 					selectedBlock = &bw;
@@ -82,19 +79,17 @@ int main() {
 		for (auto& block : blocks) {
 			Vector2 mouse = GetMousePosition();
 
-			// Kliknięcie wyjścia: start połączenia
 			if (CheckCollisionPointCircle(mouse, block.block->GetOutputPos(), 6)) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 					connectionStart = block.block;
 				}
 			}
 
-			// Kliknięcie wejścia: zakończenie połączenia
 			if (CheckCollisionPointCircle(mouse, block.block->GetInputPos(), 6)) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && connectionStart && connectionStart != block.block) {
-					// Twórz połączenie
 					connections.push_back({ connectionStart, block.block });
 					block.block->setInput(connectionStart->getOutput());
+					block.block->setPrev(connectionStart->getIdx());
 					connectionStart = nullptr;
 				}
 			}
@@ -106,6 +101,7 @@ int main() {
 					2.0f, MAROON
 				);
 			}
+
 		}
 
 		for (const auto& conn : connections) {
@@ -138,6 +134,10 @@ int main() {
 					bw = isCheckedS;
 					//DrawText(isCheckedS ? "Zaznaczone" : "Odznaczone", 130, 100, 20, DARKGRAY);
 					sobel->setBW(bw);
+					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) { 
+						sobel->setInput(blocks[sobel->getPrev()].block->getOutput());
+						sobel->process(); 
+					}
 				}
 			} break;
 
@@ -150,7 +150,12 @@ int main() {
 					//DrawText(isCheckedL ? "Zaznaczone" : "Odznaczone", 130, 100, 20, DARKGRAY);
 					neg = isCheckedL;
 					lap->setNeg(neg);
+					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
+						lap->setInput(blocks[lap->getPrev()].block->getOutput());
+						lap->process();
+					}
 				}
+
 			} break;
 
 			case BlockType::Input: {
@@ -168,6 +173,7 @@ int main() {
 				static char filename[128] = "";
 				GuiTextBox({ 1110, (float)y, 150, 25 }, filename, 128, true);
 				if (GuiButton({ 1110.0f, float(y) + 40, 150, 30 }, "Export Image")) {
+					output->setInput(blocks[output->getPrev()].block->getOutput());
 					output->setFilePath(filename);
 					output->process();
 				}
@@ -178,8 +184,12 @@ int main() {
 				if (median) {
 					int size = median->getSize();
 					float sizebuf;
-					size = GuiSlider({ 1110, (float)y, 20, 20 }, "Size", " ", &sizebuf, 0, 100);
+					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
 					median->SetSize(3 + static_cast<int>(sizebuf / 100 * 8));
+					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) { 
+						median->setInput(blocks[median->getPrev()].block->getOutput());
+						median->process(); 
+					}
 				}
 			} break;
 
@@ -189,10 +199,14 @@ int main() {
 					int size = gauss->getSize();
 					float sizebuf;
 					float sigma = gauss->getSigma();
-					size = GuiSlider({ 1110, (float)y, 20, 20 }, "Size", " ", &sizebuf, 0, 100);
-					sigma = GuiSlider({ 1110, (float)y, 40, 20 }, "Sigma", " ", &sigma, 0, 100);
+					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
+					sigma = GuiSlider({ 1110, (float)y+40.0f, 150, 20 }, "Sigma", " ", &sigma, 0, 100);
 					gauss->setSize(3 + static_cast<int>(sizebuf / 100 * 8));
 					gauss->setSigma(sigma / 20);
+					if (GuiButton({ 1110.0f, y + 80.0f, 150.0f, 30.0f }, "Process")) { 
+						gauss->setInput(blocks[gauss->getPrev()].block->getOutput());
+						gauss->process(); 
+					}
 				}
 			} break;
 

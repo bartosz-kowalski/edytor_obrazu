@@ -14,10 +14,14 @@ void GaussianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void GaussianFilterBlock::process() {
-	if (in) {
+	if (in != nullptr) {
 		image = ImageCopy(*in);
 		gaussian();
 		out = std::make_shared<Image>(image);
+		printf("%s", "processed");
+	}
+	else {
+		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
 std::shared_ptr<Image> GaussianFilterBlock::getOutput() {

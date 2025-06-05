@@ -36,3 +36,27 @@ void BasicBlock::Draw() {
 void BasicBlock::setPosition(Vector2 pos) {
     position = pos;
 }
+
+void BasicBlock::setPrev(int p) {
+    idx_prev = p;
+}
+
+void BasicBlock::setNext(int n) {
+    idx_next = n;
+}
+
+int BasicBlock::getPrev() {
+    return idx_prev;
+}
+
+int BasicBlock::getNext() {
+    return idx_next;
+}
+
+int BasicBlock::getIdx() {
+    return idx;
+}
+
+void BasicBlock::setIdx(int i) {
+    idx = i;
+}

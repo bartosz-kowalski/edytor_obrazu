@@ -37,6 +37,7 @@ void InputBlock::setFileName(const std::string& name) {
 
 void InputBlock::process(){
 	loadImage();
+	printf("%s", "processed");
 }
 
 std::shared_ptr<Image> InputBlock::getOutput() {

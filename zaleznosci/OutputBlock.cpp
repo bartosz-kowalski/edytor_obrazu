@@ -6,8 +6,11 @@ void OutputBlock::saveImage() {
 			ExportImage(*in, filePath.c_str());
 		}
 		catch (...) {
-
+			printf("%s", "giga L \n");
 		}
+	}
+	else {
+		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
 
@@ -27,6 +30,7 @@ void OutputBlock::setInput(std::shared_ptr<Image> input) {
 }
 void OutputBlock::process() {
 	saveImage();
+	printf("%s", "processed");
 }
 
 void OutputBlock::setFilePath(const std::string& path) {

@@ -15,10 +15,14 @@ void LaplacianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void LaplacianFilterBlock::process() {
-	if (in) {
+	if (in!=nullptr) {
 		image = ImageCopy(*in);
 		laplacian();
 		out = std::make_shared<Image>(image);
+		printf("%s", "processed");
+	}
+	else {
+		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
 std::shared_ptr<Image> LaplacianFilterBlock::getOutput() {

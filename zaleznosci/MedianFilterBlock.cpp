@@ -14,10 +14,14 @@ void MedianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void MedianFilterBlock::process() {
-	if (in) {
+	if (in != nullptr) {
 		image = ImageCopy(*in);
 		median();
 		out = std::make_shared<Image>(image);
+		printf("%s", "processed");
+	}
+	else {
+		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
 std::shared_ptr<Image> MedianFilterBlock::getOutput() {

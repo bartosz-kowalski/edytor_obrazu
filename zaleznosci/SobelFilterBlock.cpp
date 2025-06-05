@@ -14,10 +14,14 @@ void SobelFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void SobelFilterBlock::process() {
-	if (in) {
+	if (in != nullptr) {
 		image = ImageCopy(*in);
 		sobel();
 		out = std::make_shared<Image>(image);
+		printf("%s", "processed");
+	}
+	else {
+		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
 std::shared_ptr<Image> SobelFilterBlock::getOutput() {

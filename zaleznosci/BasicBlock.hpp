@@ -25,6 +25,8 @@ protected:
 	std::shared_ptr<Image> in;
 
 	std::shared_ptr<Image> out;
+
+	int idx_prev, idx_next, idx;
 public:
 	BasicBlock() {};
 
@@ -40,9 +42,21 @@ public:
 
 	virtual void setPosition(Vector2);
 
-    Vector2 GetInputPos() const;
+    virtual Vector2 GetInputPos() const;
 
-    Vector2 GetOutputPos() const; 
+    virtual Vector2 GetOutputPos() const; 
+
+	virtual void setPrev(int);
+
+	virtual void setNext(int);
+
+	virtual int getPrev();
+
+	virtual int getNext();
+
+	virtual int getIdx();
+
+	virtual void setIdx(int);
 };
 
 inline BasicBlock::~BasicBlock() {
