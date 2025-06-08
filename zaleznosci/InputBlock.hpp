@@ -9,6 +9,8 @@ private:
 
 	void loadImage();
 public:
+	const BlockType type = BlockType::Input;
+
 	InputBlock(const std::string&);
 
 	~InputBlock() override;
@@ -19,5 +21,9 @@ public:
 
 	void process() override;
 
+	const char* getName();
+
 	std::shared_ptr<Image> getOutput() override;
+
+	BlockType getType() const override;
 };

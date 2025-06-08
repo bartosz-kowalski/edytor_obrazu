@@ -7,6 +7,8 @@ private:
 
 	float sigma = 3;
 public:
+	const BlockType type = BlockType::Gaussian;
+
 	GaussianFilterBlock(std::shared_ptr<Image>, int, float);
 
 	~GaussianFilterBlock() override;
@@ -28,4 +30,6 @@ public:
 	int getSize();
 
 	void setSize(int);
+
+	BlockType getType() const override;
 };

@@ -43,3 +43,11 @@ void InputBlock::process(){
 std::shared_ptr<Image> InputBlock::getOutput() {
 	return out;
 }
+
+const char* InputBlock::getName() {
+	return fileName.c_str();
+}
+
+BlockType InputBlock::getType() const {
+	return BlockType::Input;
+}

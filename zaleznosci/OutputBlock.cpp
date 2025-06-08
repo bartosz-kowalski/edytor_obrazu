@@ -41,3 +41,11 @@ std::shared_ptr<Image> OutputBlock::getOutput() {
 	saveImage();
 	return nullptr;
 }
+
+const char* OutputBlock::getName() {
+	return filePath.c_str();
+}
+
+BlockType OutputBlock::getType() const {
+	return BlockType::Output;
+}

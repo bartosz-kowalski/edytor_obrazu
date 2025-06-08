@@ -9,6 +9,17 @@
 #include <cmath>
 #include <memory>
 #include <thread>
+#include <stack>
+
+enum class BlockType {
+	None,
+	Input,
+	Median,
+	Gaussian,
+	Laplacian,
+	Sobel,
+	Output
+};
 
 class BasicBlock {
 protected:
@@ -57,6 +68,8 @@ public:
 	virtual int getIdx();
 
 	virtual void setIdx(int);
+
+	virtual BlockType getType() const = 0;
 };
 
 inline BasicBlock::~BasicBlock() {

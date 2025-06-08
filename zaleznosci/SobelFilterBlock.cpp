@@ -110,3 +110,7 @@ int SobelFilterBlock::getThresh() {
 void SobelFilterBlock::setThresh(int th) {
 	edgeThresh = th;
 }
+
+BlockType SobelFilterBlock::getType() const{
+	return BlockType::Sobel;
+}

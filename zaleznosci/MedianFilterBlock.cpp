@@ -87,3 +87,7 @@ void MedianFilterBlock::SetSize(int size) {
 int MedianFilterBlock::getSize() {
 	return filterSize;
 }
+
+BlockType MedianFilterBlock::getType() const {
+	return BlockType::Median;
+}

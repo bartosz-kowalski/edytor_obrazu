@@ -12,11 +12,11 @@
 #include "raygui.h"
 
 int main() {
-	InitWindow(1280, 720, "Bloczkowy Edytor z raygui");
+	InitWindow(1280, 720, "Bloczkowy Edytor Obrazow");
 	SetTargetFPS(60);
 
-	std::vector<BlockWrapper> blocks;
-	BlockWrapper* selectedBlock = nullptr;
+	std::vector< std::shared_ptr<BasicBlock>> blocks;
+	std::shared_ptr<BasicBlock> selectedBlock = nullptr;
 	std::vector<Connection> connections;
 	std::shared_ptr<BasicBlock> connectionStart = nullptr;
 
@@ -39,10 +39,9 @@ int main() {
 		if (GuiButton({ 10, 200, 120, 30 }, "Median")) draggingType = BlockType::Median;
 		if (GuiButton({ 10, 240, 120, 30 }, "Gaussian")) draggingType = BlockType::Gaussian;
 
-		// Drag & drop nowego bloku
 		if (draggingType != BlockType::None && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
 			Vector2 pos = GetMousePosition();
-			pos.x = std::max(pos.x, 160.0f);  // nie upuszczaj na menu
+			pos.x = std::max(pos.x, 160.0f);
 
 			std::shared_ptr<BasicBlock> newBlock;
 			switch (draggingType) {
@@ -57,21 +56,21 @@ int main() {
 
 			if (newBlock) {
 				newBlock->setInput(nullptr);
-				blocks.push_back({ newBlock, draggingType });
+				blocks.push_back({ newBlock});
 				newBlock->setPosition(pos);
 				newBlock->Draw();
-				newBlock->setIdx(static_cast<int>(blocks.size())-1);
+				newBlock->setIdx(static_cast<int>(blocks.size()) - 1);
 			}
 
 			draggingType = BlockType::None;
 		}
 
 		for (auto& bw : blocks) {
-			bw.block->Draw();
+			bw->Draw();
 
-			if (CheckCollisionPointRec(GetMousePosition(), { bw.block->GetInputPos().x, bw.block->GetInputPos().y - 20, 150, 80 })) {
+			if (CheckCollisionPointRec(GetMousePosition(), { bw->GetInputPos().x, bw->GetInputPos().y - 20, 150, 80 })) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-					selectedBlock = &bw;
+					selectedBlock = bw;
 				}
 			}
 		}
@@ -79,17 +78,17 @@ int main() {
 		for (auto& block : blocks) {
 			Vector2 mouse = GetMousePosition();
 
-			if (CheckCollisionPointCircle(mouse, block.block->GetOutputPos(), 6)) {
+			if (CheckCollisionPointCircle(mouse, block->GetOutputPos(), 6)) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-					connectionStart = block.block;
+					connectionStart = block;
 				}
 			}
 
-			if (CheckCollisionPointCircle(mouse, block.block->GetInputPos(), 6)) {
-				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && connectionStart && connectionStart != block.block) {
-					connections.push_back({ connectionStart, block.block });
-					block.block->setInput(connectionStart->getOutput());
-					block.block->setPrev(connectionStart->getIdx());
+			if (CheckCollisionPointCircle(mouse, block->GetInputPos(), 6)) {
+				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && connectionStart && connectionStart != block) {
+					connections.push_back({ connectionStart, block });
+					block->setInput(connectionStart->getOutput());
+					block->setPrev(connectionStart->getIdx());
 					connectionStart = nullptr;
 				}
 			}
@@ -112,15 +111,14 @@ int main() {
 			);
 		}
 
-		// Panel parametrów
 		DrawRectangle(1100, 0, 180, GetScreenHeight(), Fade(LIGHTGRAY, 0.3f));
 		if (selectedBlock != nullptr) {
 			DrawText("PARAMETRY", 1110, 20, 18, DARKGRAY);
 			int y = 60;
 
-			switch (selectedBlock->type) {
+			switch (selectedBlock->getType()) {
 			case BlockType::Sobel: {
-				auto sobel = std::dynamic_pointer_cast<SobelFilterBlock>(selectedBlock->block);
+				auto sobel = std::dynamic_pointer_cast<SobelFilterBlock>(selectedBlock);
 				if (sobel) {
 					static int thresh = 100;
 					thresh = sobel->getThresh();
@@ -132,26 +130,24 @@ int main() {
 					isCheckedS = bw;
 					bw = GuiCheckBox({ 1110, (float)y, 20, 20 }, "B/W mode", &isCheckedS);
 					bw = isCheckedS;
-					//DrawText(isCheckedS ? "Zaznaczone" : "Odznaczone", 130, 100, 20, DARKGRAY);
 					sobel->setBW(bw);
-					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) { 
-						sobel->setInput(blocks[sobel->getPrev()].block->getOutput());
-						sobel->process(); 
+					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
+						sobel->setInput(blocks[sobel->getPrev()]->getOutput());
+						sobel->process();
 					}
 				}
 			} break;
 
 			case BlockType::Laplacian: {
-				auto lap = std::dynamic_pointer_cast<LaplacianFilterBlock>(selectedBlock->block);
+				auto lap = std::dynamic_pointer_cast<LaplacianFilterBlock>(selectedBlock);
 				if (lap) {
 					bool neg = lap->getNeg();
 					isCheckedL = neg;
 					neg = GuiCheckBox({ 1110, (float)y, 20, 20 }, "Negative", &isCheckedL);
-					//DrawText(isCheckedL ? "Zaznaczone" : "Odznaczone", 130, 100, 20, DARKGRAY);
 					neg = isCheckedL;
 					lap->setNeg(neg);
 					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
-						lap->setInput(blocks[lap->getPrev()].block->getOutput());
+						lap->setInput(blocks[lap->getPrev()]->getOutput());
 						lap->process();
 					}
 				}
@@ -159,8 +155,9 @@ int main() {
 			} break;
 
 			case BlockType::Input: {
-				auto input = std::dynamic_pointer_cast<InputBlock>(selectedBlock->block);
+				auto input = std::dynamic_pointer_cast<InputBlock>(selectedBlock);
 				static char filename[128] = "";
+				//strcpy(filename, input->getName());
 				GuiTextBox({ 1110, (float)y, 150, 25 }, filename, 128, true);
 				if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Load Image")) {
 					input->setFileName(filename);
@@ -169,43 +166,46 @@ int main() {
 			} break;
 
 			case BlockType::Output: {
-				auto output = std::dynamic_pointer_cast<OutputBlock>(selectedBlock->block);
+				auto output = std::dynamic_pointer_cast<OutputBlock>(selectedBlock);
 				static char filename[128] = "";
+				std::stack<int> stos;
+				//strcpy(filename, output->getName());
 				GuiTextBox({ 1110, (float)y, 150, 25 }, filename, 128, true);
 				if (GuiButton({ 1110.0f, float(y) + 40, 150, 30 }, "Export Image")) {
-					output->setInput(blocks[output->getPrev()].block->getOutput());
+					output->setInput(blocks[output->getPrev()]->getOutput());
 					output->setFilePath(filename);
+
 					output->process();
 				}
 			} break;
 
 			case BlockType::Median: {
-				auto median = std::dynamic_pointer_cast<MedianFilterBlock>(selectedBlock->block);
+				auto median = std::dynamic_pointer_cast<MedianFilterBlock>(selectedBlock);
 				if (median) {
 					int size = median->getSize();
 					float sizebuf;
 					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
 					median->SetSize(3 + static_cast<int>(sizebuf / 100 * 8));
-					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) { 
-						median->setInput(blocks[median->getPrev()].block->getOutput());
-						median->process(); 
+					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
+						median->setInput(blocks[median->getPrev()]->getOutput());
+						median->process();
 					}
 				}
 			} break;
 
 			case BlockType::Gaussian: {
-				auto gauss = std::dynamic_pointer_cast<GaussianFilterBlock>(selectedBlock->block);
+				auto gauss = std::dynamic_pointer_cast<GaussianFilterBlock>(selectedBlock);
 				if (gauss) {
 					int size = gauss->getSize();
 					float sizebuf;
 					float sigma = gauss->getSigma();
 					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
-					sigma = GuiSlider({ 1110, (float)y+40.0f, 150, 20 }, "Sigma", " ", &sigma, 0, 100);
+					sigma = GuiSlider({ 1110, (float)y + 40.0f, 150, 20 }, "Sigma", " ", &sigma, 0, 100);
 					gauss->setSize(3 + static_cast<int>(sizebuf / 100 * 8));
 					gauss->setSigma(sigma / 20);
-					if (GuiButton({ 1110.0f, y + 80.0f, 150.0f, 30.0f }, "Process")) { 
-						gauss->setInput(blocks[gauss->getPrev()].block->getOutput());
-						gauss->process(); 
+					if (GuiButton({ 1110.0f, y + 80.0f, 150.0f, 30.0f }, "Process")) {
+						gauss->setInput(blocks[gauss->getPrev()]->getOutput());
+						gauss->process();
 					}
 				}
 			} break;
@@ -220,30 +220,3 @@ int main() {
 	CloseWindow();
 	return 0;
 }
-
-/*int main() {
-
-	InputBlock in("zdjecie.jpg");
-	in.process();
-
-	MedianFilterBlock median(in.getOutput(), 5);
-	GaussianFilterBlock gauss(in.getOutput(), 5, 3);
-	SobelFilterBlock sobel(in.getOutput(), 100, false);
-	LaplacianFilterBlock laplace(in.getOutput(), false);
-	std::jthread(&BasicBlock::process, &median);
-	std::jthread(&BasicBlock::process, &gauss);
-	std::jthread(&BasicBlock::process, &sobel);
-	std::jthread(&BasicBlock::process, &laplace);
-
-	OutputBlock o1(median.getOutput(), "median_wyj.jpg");
-	OutputBlock o2(gauss.getOutput(), "gauss_wyj.jpg");
-	OutputBlock o3(sobel.getOutput(), "sobel_wyj.jpg");
-	OutputBlock o4(laplace.getOutput(), "laplace_wyj.jpg");
-
-	o1.process();
-	o2.process();
-	o3.process();
-	o4.process();
-
-	return 0;
-}*/

@@ -6,6 +6,8 @@ private:
 	int edgeThresh = 100;
 	bool bw = true;
 public:
+	const BlockType type = BlockType::Sobel;
+
 	SobelFilterBlock(std::shared_ptr<Image>, int, bool);
 
 	~SobelFilterBlock() override;
@@ -26,4 +28,5 @@ public:
 
 	void setThresh(int);
 
+	BlockType getType() const override;
 };

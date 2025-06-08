@@ -106,3 +106,7 @@ void LaplacianFilterBlock::setNeg(bool neg) {
 bool LaplacianFilterBlock::getNeg() {
 	return negative;
 }
+
+BlockType LaplacianFilterBlock::getType() const {
+	return BlockType::Laplacian;
+}

@@ -5,6 +5,8 @@ class LaplacianFilterBlock : public BasicBlock {
 private:
 	bool negative;
 public:
+	const BlockType type = BlockType::Laplacian;
+
 	LaplacianFilterBlock(std::shared_ptr<Image>, bool);
 
 	~LaplacianFilterBlock() override;
@@ -21,4 +23,5 @@ public:
 
 	bool getNeg();
 
+	BlockType getType() const override;
 };

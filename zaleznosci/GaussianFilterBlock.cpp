@@ -125,3 +125,7 @@ void GaussianFilterBlock::setSize(int size) {
 	else
 		size = 5;
 }
+
+BlockType GaussianFilterBlock::getType() const {
+	return BlockType::Gaussian;
+}
