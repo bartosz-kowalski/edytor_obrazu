@@ -1,10 +1,11 @@
 #include "OutputBLock.hpp"
 
 void OutputBlock::saveImage() {
+
 	if (in != nullptr && !filePath.empty()) {
 		try {
-			ExportImage(*in, filePath.c_str());
 			fail = 1;
+			ExportImage(*in, filePath.c_str());
 		}
 		catch (...) {
 			fail = 2;

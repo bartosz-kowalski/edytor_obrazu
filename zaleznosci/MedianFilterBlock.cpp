@@ -18,7 +18,7 @@ void MedianFilterBlock::process() {
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//median();
-		auto j = std::jthread(&MedianFilterBlock::median, this);
+		std::jthread(&MedianFilterBlock::median, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
 		fail = 1;

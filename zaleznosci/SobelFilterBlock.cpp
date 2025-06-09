@@ -18,7 +18,7 @@ void SobelFilterBlock::process() {
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//sobel();
-		auto j = std::jthread(&SobelFilterBlock::sobel, this);
+		std::jthread(&SobelFilterBlock::sobel, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
 		fail = 1;

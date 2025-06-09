@@ -19,7 +19,7 @@ void LaplacianFilterBlock::process() {
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//laplacian();
-		auto j = std::jthread(&LaplacianFilterBlock::laplacian, this);
+		std::jthread(&LaplacianFilterBlock::laplacian, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
 		fail = 1;

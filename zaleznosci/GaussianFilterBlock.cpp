@@ -18,7 +18,7 @@ void GaussianFilterBlock::process() {
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//gaussian();
-		auto j = std::jthread(&GaussianFilterBlock::gaussian, this);
+		std::jthread(&GaussianFilterBlock::gaussian, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
 		fail = 1;

@@ -53,7 +53,7 @@ public:
 
 	virtual std::shared_ptr<Image> getOutput() = 0;
 
-	virtual void Draw();
+	virtual void Draw() = 0;
 
 	virtual void setPosition(Vector2);
 
