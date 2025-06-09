@@ -29,4 +29,6 @@ public:
 	void setThresh(int);
 
 	BlockType getType() const override;
+
+	void Draw() override;
 };

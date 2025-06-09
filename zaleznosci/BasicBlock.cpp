@@ -45,15 +45,15 @@ void BasicBlock::setNext(int n) {
     idx_next = n;
 }
 
-int BasicBlock::getPrev() {
+int BasicBlock::getPrev() const{
     return idx_prev;
 }
 
-int BasicBlock::getNext() {
+int BasicBlock::getNext() const{
     return idx_next;
 }
 
-int BasicBlock::getIdx() {
+int BasicBlock::getIdx() const{
     return idx;
 }
 

@@ -24,4 +24,6 @@ public:
 	int getSize();
 
 	BlockType getType() const override;
+
+	void Draw() override;
 };

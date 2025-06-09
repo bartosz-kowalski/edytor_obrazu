@@ -16,7 +16,8 @@ void GaussianFilterBlock::setInput(std::shared_ptr<Image> input) {
 void GaussianFilterBlock::process() {
 	if (in != nullptr) {
 		image = ImageCopy(*in);
-		gaussian();
+		//gaussian();
+		std::jthread(&GaussianFilterBlock::gaussian, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
 	}
@@ -128,4 +129,38 @@ void GaussianFilterBlock::setSize(int size) {
 
 BlockType GaussianFilterBlock::getType() const {
 	return BlockType::Gaussian;
+}
+
+void GaussianFilterBlock::Draw() {
+
+	static Texture2D tekstura = LoadTexture("tekstury/Gaussian.png");
+
+	DrawCircleV(GetInputPos(), 5, BLUE);
+	DrawCircleV(GetOutputPos(), 5, RED);
+
+	DrawTexture(tekstura, position.x, position.y, WHITE);
+
+	Vector2 mouse = GetMousePosition();
+
+	static Rectangle textureRect;
+	textureRect.x = position.x;
+	textureRect.y = position.y;
+	textureRect.width = (float)tekstura.width;
+	textureRect.height = (float)tekstura.height;
+
+
+	if (CheckCollisionPointRec(mouse, textureRect)) {
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+			dragging = true;
+			dragOffset = Vector2Subtract(mouse, position);
+		}
+	}
+	if (dragging) {
+		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+			position = Vector2Subtract(mouse, dragOffset);
+		}
+		else {
+			dragging = false;
+		}
+	}
 }

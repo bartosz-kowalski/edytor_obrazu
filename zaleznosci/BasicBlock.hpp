@@ -61,11 +61,11 @@ public:
 
 	virtual void setNext(int);
 
-	virtual int getPrev();
+	virtual int getPrev() const;
 
-	virtual int getNext();
+	virtual int getNext() const;
 
-	virtual int getIdx();
+	virtual int getIdx() const;
 
 	virtual void setIdx(int);
 

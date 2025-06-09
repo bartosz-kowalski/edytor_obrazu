@@ -49,3 +49,36 @@ const char* OutputBlock::getName() {
 BlockType OutputBlock::getType() const {
 	return BlockType::Output;
 }
+
+void OutputBlock::Draw() {
+
+	static Texture2D tekstura = LoadTexture("tekstury/Output.png");
+
+	DrawCircleV(GetInputPos(), 5, BLUE);
+
+	DrawTexture(tekstura, position.x, position.y, WHITE);
+
+	Vector2 mouse = GetMousePosition();
+
+	static Rectangle textureRect;
+	textureRect.x = position.x;
+	textureRect.y = position.y;
+	textureRect.width = (float)tekstura.width;
+	textureRect.height = (float)tekstura.height;
+
+
+	if (CheckCollisionPointRec(mouse, textureRect)) {
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+			dragging = true;
+			dragOffset = Vector2Subtract(mouse, position);
+		}
+	}
+	if (dragging) {
+		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+			position = Vector2Subtract(mouse, dragOffset);
+		}
+		else {
+			dragging = false;
+		}
+	}
+}

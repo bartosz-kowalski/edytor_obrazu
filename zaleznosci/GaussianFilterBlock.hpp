@@ -32,4 +32,6 @@ public:
 	void setSize(int);
 
 	BlockType getType() const override;
+
+	void Draw() override;
 };

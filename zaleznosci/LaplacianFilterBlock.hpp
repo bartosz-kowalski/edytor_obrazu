@@ -24,4 +24,6 @@ public:
 	bool getNeg();
 
 	BlockType getType() const override;
+
+	void Draw() override;
 };

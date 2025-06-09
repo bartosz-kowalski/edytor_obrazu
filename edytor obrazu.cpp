@@ -22,10 +22,13 @@ int main() {
 
 	BlockType draggingType = BlockType::None;
 	bool dragging = false;
+	bool ereaser = false;
 
 	while (!WindowShouldClose()) {
 		bool isCheckedS = true;
 		bool isCheckedL = false;
+		static char filenameIn[128] = "";
+		static char filenameOut[128] = "";
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
@@ -38,8 +41,9 @@ int main() {
 		if (GuiButton({ 10, 160, 120, 30 }, "Laplacian")) draggingType = BlockType::Laplacian;
 		if (GuiButton({ 10, 200, 120, 30 }, "Median")) draggingType = BlockType::Median;
 		if (GuiButton({ 10, 240, 120, 30 }, "Gaussian")) draggingType = BlockType::Gaussian;
+		if (GuiButton({ 10, 280, 120, 30 }, "Ereaser")) ereaser = !ereaser;
 
-		if (draggingType != BlockType::None && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+		if (draggingType != BlockType::None && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)&& !ereaser) {
 			Vector2 pos = GetMousePosition();
 			pos.x = std::max(pos.x, 160.0f);
 
@@ -63,6 +67,11 @@ int main() {
 			}
 
 			draggingType = BlockType::None;
+		}
+
+		if (ereaser)
+		{
+
 		}
 
 		for (auto& bw : blocks) {
@@ -156,26 +165,43 @@ int main() {
 
 			case BlockType::Input: {
 				auto input = std::dynamic_pointer_cast<InputBlock>(selectedBlock);
-				static char filename[128] = "";
 				//strcpy(filename, input->getName());
-				GuiTextBox({ 1110, (float)y, 150, 25 }, filename, 128, true);
+				GuiTextBox({ 1110, (float)y, 150, 25 }, filenameIn, 128, true);
 				if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Load Image")) {
-					input->setFileName(filename);
+					std::string filePath = "zdjecia/" + std::string(filenameIn);
+					input->setFileName(filePath);
 					input->process();
 				}
 			} break;
 
 			case BlockType::Output: {
 				auto output = std::dynamic_pointer_cast<OutputBlock>(selectedBlock);
-				static char filename[128] = "";
 				std::stack<int> stos;
+				int prev = output->getIdx();
 				//strcpy(filename, output->getName());
-				GuiTextBox({ 1110, (float)y, 150, 25 }, filename, 128, true);
+				GuiTextBox({ 1110, (float)y, 150, 25 }, filenameOut, 128, true);
 				if (GuiButton({ 1110.0f, float(y) + 40, 150, 30 }, "Export Image")) {
 					output->setInput(blocks[output->getPrev()]->getOutput());
-					output->setFilePath(filename);
+					std::string filePath = "zdjecia/" + std::string(filenameOut);
+					output->setFilePath(filePath);
+					while (prev >= 0) {
+						stos.push(prev);
+						prev = blocks[stos.top()]->getPrev();
+						if (prev == -1) {
+							auto input = std::dynamic_pointer_cast<InputBlock>(blocks[stos.top()]); 
+							filePath.clear();
+							filePath = "zdjecia/" + std::string(filenameIn);
+							input ->setFileName(filePath);
+						}
+					}
+					while (!stos.empty()) {
+						blocks[stos.top()]->process();
+						int buf = stos.top();
+						stos.pop();
+						if(!stos.empty())
+							blocks[stos.top()]->setInput(blocks[buf]->getOutput());
 
-					output->process();
+					}
 				}
 			} break;
 

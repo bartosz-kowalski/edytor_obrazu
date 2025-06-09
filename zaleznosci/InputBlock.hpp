@@ -26,4 +26,8 @@ public:
 	std::shared_ptr<Image> getOutput() override;
 
 	BlockType getType() const override;
+
+	int getPrev() const override;
+
+	void Draw() override;
 };
