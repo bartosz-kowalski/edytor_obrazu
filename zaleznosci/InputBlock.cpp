@@ -6,13 +6,16 @@ void InputBlock::loadImage() {
 			image = LoadImage(fileName.c_str());
 			out = std::make_shared<Image>(image);
 			isFileLoaded = true;
+			fail = 1;
 		}
 		catch (...) {
+			fail = 2;
 			out = nullptr;
 			isFileLoaded = false;
 		}
 	}
 	else {
+		fail = 2;
 		out = nullptr;
 		isFileLoaded = false;
 	}
@@ -36,6 +39,7 @@ void InputBlock::setFileName(const std::string& name) {
 }
 
 void InputBlock::process() {
+	wasActive = true;
 	loadImage();
 	printf("%s", "processed");
 }
@@ -59,6 +63,22 @@ int InputBlock::getPrev() const {
 void InputBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Input.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Input.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/InputGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/InputSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetOutputPos(), 5, RED);
 

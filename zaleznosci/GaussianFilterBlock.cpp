@@ -14,14 +14,17 @@ void GaussianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void GaussianFilterBlock::process() {
+	wasActive = true;
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//gaussian();
-		std::jthread(&GaussianFilterBlock::gaussian, this);
+		auto j = std::jthread(&GaussianFilterBlock::gaussian, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
+		fail = 1;
 	}
 	else {
+		fail = 2;
 		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
@@ -134,6 +137,22 @@ BlockType GaussianFilterBlock::getType() const {
 void GaussianFilterBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Gaussian.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Gaussian.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/GaussianGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/GaussianSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetInputPos(), 5, BLUE);
 	DrawCircleV(GetOutputPos(), 5, RED);

@@ -29,6 +29,10 @@ protected:
 
 	bool dragging = false;
 
+	bool wasActive = false;
+
+	int fail = 0;
+
 	Vector2 dragOffset;
 
 	Image image;

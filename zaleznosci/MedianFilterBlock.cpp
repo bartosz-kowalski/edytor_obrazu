@@ -14,14 +14,17 @@ void MedianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void MedianFilterBlock::process() {
+	wasActive = true;
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//median();
-		std::jthread(&MedianFilterBlock::median, this);
+		auto j = std::jthread(&MedianFilterBlock::median, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
+		fail = 1;
 	}
 	else {
+		fail = 2;
 		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
@@ -96,6 +99,22 @@ BlockType MedianFilterBlock::getType() const {
 void MedianFilterBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Median.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Median.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/MedianGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/MedianSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetInputPos(), 5, BLUE);
 	DrawCircleV(GetOutputPos(), 5, RED);

@@ -14,15 +14,18 @@ void SobelFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void SobelFilterBlock::process() {
+	wasActive = true;
 	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//sobel();
-		std::jthread(&SobelFilterBlock::sobel, this);
+		auto j = std::jthread(&SobelFilterBlock::sobel, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
+		fail = 1;
 	}
 	else {
 		printf("%s", "Brak pod³¹czonego wejœcia");
+		fail = 2;
 	}
 }
 std::shared_ptr<Image> SobelFilterBlock::getOutput() {
@@ -112,13 +115,29 @@ void SobelFilterBlock::setThresh(int th) {
 	edgeThresh = th;
 }
 
-BlockType SobelFilterBlock::getType() const{
+BlockType SobelFilterBlock::getType() const {
 	return BlockType::Sobel;
 }
 
 void SobelFilterBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Sobel.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Sobel.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/SobelGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/SobelSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetInputPos(), 5, BLUE);
 	DrawCircleV(GetOutputPos(), 5, RED);

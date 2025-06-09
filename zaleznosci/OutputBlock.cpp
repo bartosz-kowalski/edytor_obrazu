@@ -1,15 +1,18 @@
 #include "OutputBLock.hpp"
 
 void OutputBlock::saveImage() {
-	if (in!=nullptr && !filePath.empty()) {
+	if (in != nullptr && !filePath.empty()) {
 		try {
 			ExportImage(*in, filePath.c_str());
+			fail = 1;
 		}
 		catch (...) {
+			fail = 2;
 			printf("%s", "giga L \n");
 		}
 	}
 	else {
+		fail = 2;
 		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
@@ -29,6 +32,7 @@ void OutputBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void OutputBlock::process() {
+	wasActive = true;
 	saveImage();
 	printf("%s", "processed");
 }
@@ -53,6 +57,22 @@ BlockType OutputBlock::getType() const {
 void OutputBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Output.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Output.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/OutputGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/OutputSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetInputPos(), 5, BLUE);
 

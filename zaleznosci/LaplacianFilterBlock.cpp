@@ -15,14 +15,17 @@ void LaplacianFilterBlock::setInput(std::shared_ptr<Image> input) {
 	}
 }
 void LaplacianFilterBlock::process() {
-	if (in!=nullptr) {
+	wasActive = true;
+	if (in != nullptr) {
 		image = ImageCopy(*in);
 		//laplacian();
-		std::jthread(&LaplacianFilterBlock::laplacian, this);
+		auto j = std::jthread(&LaplacianFilterBlock::laplacian, this);
 		out = std::make_shared<Image>(image);
 		printf("%s", "processed");
+		fail = 1;
 	}
 	else {
+		fail = 2;
 		printf("%s", "Brak pod³¹czonego wejœcia");
 	}
 }
@@ -115,6 +118,22 @@ BlockType LaplacianFilterBlock::getType() const {
 void LaplacianFilterBlock::Draw() {
 
 	static Texture2D tekstura = LoadTexture("tekstury/Laplacian.png");
+	if (wasActive) {
+		switch (fail) {
+		case 0:
+			tekstura = LoadTexture("tekstury/Laplacian.png");
+			break;
+		case 1:
+			tekstura = LoadTexture("tekstury/LaplacianGit.png");
+			break;
+		case 2:
+			tekstura = LoadTexture("tekstury/LaplacianSlabo.png");
+			break;
+		default:
+			break;
+		}
+		wasActive = false;
+	}
 
 	DrawCircleV(GetInputPos(), 5, BLUE);
 	DrawCircleV(GetOutputPos(), 5, RED);

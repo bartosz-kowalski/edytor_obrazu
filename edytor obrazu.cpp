@@ -43,7 +43,7 @@ int main() {
 		if (GuiButton({ 10, 240, 120, 30 }, "Gaussian")) draggingType = BlockType::Gaussian;
 		if (GuiButton({ 10, 280, 120, 30 }, "Ereaser")) ereaser = !ereaser;
 
-		if (draggingType != BlockType::None && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)&& !ereaser) {
+		if (draggingType != BlockType::None && IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && !ereaser) {
 			Vector2 pos = GetMousePosition();
 			pos.x = std::max(pos.x, 160.0f);
 
@@ -60,10 +60,11 @@ int main() {
 
 			if (newBlock) {
 				newBlock->setInput(nullptr);
-				blocks.push_back({ newBlock});
+				blocks.push_back({ newBlock });
 				newBlock->setPosition(pos);
 				newBlock->Draw();
 				newBlock->setIdx(static_cast<int>(blocks.size()) - 1);
+				newBlock->setPrev(-1);
 			}
 
 			draggingType = BlockType::None;
@@ -87,13 +88,13 @@ int main() {
 		for (auto& block : blocks) {
 			Vector2 mouse = GetMousePosition();
 
-			if (CheckCollisionPointCircle(mouse, block->GetOutputPos(), 6)) {
+			if (CheckCollisionPointCircle(mouse, block->GetOutputPos(), 6) && block->getType() != BlockType::Output) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 					connectionStart = block;
 				}
 			}
 
-			if (CheckCollisionPointCircle(mouse, block->GetInputPos(), 6)) {
+			if (CheckCollisionPointCircle(mouse, block->GetInputPos(), 6) && block->getType() != BlockType::Input) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && connectionStart && connectionStart != block) {
 					connections.push_back({ connectionStart, block });
 					block->setInput(connectionStart->getOutput());
@@ -141,7 +142,8 @@ int main() {
 					bw = isCheckedS;
 					sobel->setBW(bw);
 					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
-						sobel->setInput(blocks[sobel->getPrev()]->getOutput());
+						if(sobel->getPrev()!=-1)
+							sobel->setInput(blocks[sobel->getPrev()]->getOutput());
 						sobel->process();
 					}
 				}
@@ -156,7 +158,8 @@ int main() {
 					neg = isCheckedL;
 					lap->setNeg(neg);
 					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
-						lap->setInput(blocks[lap->getPrev()]->getOutput());
+						if (lap->getPrev() != -1)
+							lap->setInput(blocks[lap->getPrev()]->getOutput());
 						lap->process();
 					}
 				}
@@ -181,24 +184,25 @@ int main() {
 				//strcpy(filename, output->getName());
 				GuiTextBox({ 1110, (float)y, 150, 25 }, filenameOut, 128, true);
 				if (GuiButton({ 1110.0f, float(y) + 40, 150, 30 }, "Export Image")) {
-					output->setInput(blocks[output->getPrev()]->getOutput());
+					if (output->getPrev() != -1)
+						output->setInput(blocks[output->getPrev()]->getOutput());
 					std::string filePath = "zdjecia/" + std::string(filenameOut);
 					output->setFilePath(filePath);
 					while (prev >= 0) {
 						stos.push(prev);
 						prev = blocks[stos.top()]->getPrev();
 						if (prev == -1) {
-							auto input = std::dynamic_pointer_cast<InputBlock>(blocks[stos.top()]); 
+							auto input = std::dynamic_pointer_cast<InputBlock>(blocks[stos.top()]);
 							filePath.clear();
 							filePath = "zdjecia/" + std::string(filenameIn);
-							input ->setFileName(filePath);
+							input->setFileName(filePath);
 						}
 					}
 					while (!stos.empty()) {
 						blocks[stos.top()]->process();
 						int buf = stos.top();
 						stos.pop();
-						if(!stos.empty())
+						if (!stos.empty())
 							blocks[stos.top()]->setInput(blocks[buf]->getOutput());
 
 					}
@@ -213,7 +217,8 @@ int main() {
 					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
 					median->SetSize(3 + static_cast<int>(sizebuf / 100 * 8));
 					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
-						median->setInput(blocks[median->getPrev()]->getOutput());
+						if (median->getPrev() != -1)
+							median->setInput(blocks[median->getPrev()]->getOutput());
 						median->process();
 					}
 				}
@@ -230,7 +235,8 @@ int main() {
 					gauss->setSize(3 + static_cast<int>(sizebuf / 100 * 8));
 					gauss->setSigma(sigma / 20);
 					if (GuiButton({ 1110.0f, y + 80.0f, 150.0f, 30.0f }, "Process")) {
-						gauss->setInput(blocks[gauss->getPrev()]->getOutput());
+						if (gauss->getPrev() != -1)
+							gauss->setInput(blocks[gauss->getPrev()]->getOutput());
 						gauss->process();
 					}
 				}
@@ -239,10 +245,8 @@ int main() {
 			default: break;
 			}
 		}
-
 		EndDrawing();
 	}
-
 	CloseWindow();
 	return 0;
 }
