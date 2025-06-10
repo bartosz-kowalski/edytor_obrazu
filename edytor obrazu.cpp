@@ -65,14 +65,10 @@ int main() {
 				newBlock->Draw();
 				newBlock->setIdx(static_cast<int>(blocks.size()) - 1);
 				newBlock->setPrev(-1);
+				newBlock->setNext(-1);
 			}
 
 			draggingType = BlockType::None;
-		}
-
-		if (ereaser)
-		{
-			
 		}
 
 		for (auto& bw : blocks) {
@@ -83,22 +79,65 @@ int main() {
 					selectedBlock = bw;
 				}
 			}
+			/*else {
+				Vector2 pos = GetMousePosition();
+				if (pos.x > 140.0f && pos.x < 1100.0f && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !CheckCollisionPointRec(GetMousePosition(), { bw->GetInputPos().x, bw->GetInputPos().y - 20, 150, 80 }))
+					selectedBlock = nullptr;
+			}*/
+		}
+
+		if (ereaser && selectedBlock != nullptr)
+		{
+			int idx = selectedBlock->getIdx();
+			if (selectedBlock->getNext() >= 0) {
+				blocks[selectedBlock->getNext()]->setInput(nullptr);
+				blocks[selectedBlock->getNext()]->setPrev(-1);
+			}
+			for (int i = idx + 1; i < blocks.size(); i++) {
+				blocks[i]->setIdx(blocks[i]->getIdx() - 1);
+				if (blocks[i]->getPrev() > idx) {
+					blocks[i]->setPrev(blocks[i]->getPrev() - 1);
+				}
+				if (blocks[i]->getNext() > idx) {
+					blocks[i]->setNext(blocks[i]->getPrev() - 1);
+				}
+			}
+
+			blocks.erase(blocks.begin() + idx);
+			selectedBlock = nullptr;
+			
+			/*for (int i = 0; i < connections.size(); i++) {
+				if (connections[i].idx_form == idx || connections[i].idx_to == idx) {
+					connections.erase(connections.begin() + i);
+					break;
+				}
+			}*/
 		}
 
 		for (auto& block : blocks) {
 			Vector2 mouse = GetMousePosition();
+			int idx_from = 0;
+			int idx_to = 0;
 
 			if (CheckCollisionPointCircle(mouse, block->GetOutputPos(), 6) && block->getType() != BlockType::Output) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-					connectionStart = block;
+					if (connectionStart) {
+						connectionStart = nullptr;
+					}
+					else {
+						connectionStart = block;
+						idx_from = block->getIdx();
+					}
 				}
 			}
 
 			if (CheckCollisionPointCircle(mouse, block->GetInputPos(), 6) && block->getType() != BlockType::Input) {
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && connectionStart && connectionStart != block) {
-					connections.push_back({ connectionStart, block });
+					idx_to = block->getIdx();
+					connections.push_back({ connectionStart, block, idx_from, idx_to });
 					block->setInput(connectionStart->getOutput());
 					block->setPrev(connectionStart->getIdx());
+					connectionStart->setNext(block->getIdx());
 					connectionStart = nullptr;
 				}
 			}
@@ -142,7 +181,7 @@ int main() {
 					bw = isCheckedS;
 					sobel->setBW(bw);
 					if (GuiButton({ 1110.0f, y + 40.0f, 150.0f, 30.0f }, "Process")) {
-						if(sobel->getPrev()!=-1)
+						if (sobel->getPrev() != -1)
 							sobel->setInput(blocks[sobel->getPrev()]->getOutput());
 						sobel->process();
 					}
