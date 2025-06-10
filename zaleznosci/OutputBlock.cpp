@@ -61,13 +61,18 @@ void OutputBlock::Draw() {
 	if (wasActive) {
 		switch (fail) {
 		case 0:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/Output.png");
 			break;
 		case 1:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/OutputGit.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/OutputSlabo.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
 			break;

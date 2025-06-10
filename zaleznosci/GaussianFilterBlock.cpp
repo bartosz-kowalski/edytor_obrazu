@@ -140,13 +140,18 @@ void GaussianFilterBlock::Draw() {
 	if (wasActive) {
 		switch (fail) {
 		case 0:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/Gaussian.png");
 			break;
 		case 1:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/GaussianGit.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/GaussianSlabo.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
 			break;

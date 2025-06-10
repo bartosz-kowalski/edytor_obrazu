@@ -102,13 +102,18 @@ void MedianFilterBlock::Draw() {
 	if (wasActive) {
 		switch (fail) {
 		case 0:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/Median.png");
 			break;
 		case 1:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/MedianGit.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/MedianSlabo.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
 			break;

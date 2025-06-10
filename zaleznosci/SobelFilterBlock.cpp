@@ -125,13 +125,18 @@ void SobelFilterBlock::Draw() {
 	if (wasActive) {
 		switch (fail) {
 		case 0:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/Sobel.png");
 			break;
 		case 1:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/SobelGit.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/SobelSlabo.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
 			break;

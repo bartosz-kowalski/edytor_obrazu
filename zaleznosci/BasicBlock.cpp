@@ -31,3 +31,9 @@ int BasicBlock::getIdx() const{
 void BasicBlock::setIdx(int i) {
     idx = i;
 }
+
+void BasicBlock::wait() {
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    fail = 0;
+    wasActive = true;
+}

@@ -73,6 +73,8 @@ public:
 
 	virtual void setIdx(int);
 
+	void wait();
+
 	virtual BlockType getType() const = 0;
 };
 

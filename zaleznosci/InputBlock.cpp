@@ -66,13 +66,18 @@ void InputBlock::Draw() {
 	if (wasActive) {
 		switch (fail) {
 		case 0:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/Input.png");
 			break;
 		case 1:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/InputGit.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
+			UnloadTexture(tekstura);
 			tekstura = LoadTexture("tekstury/InputSlabo.png");
+			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
 			break;

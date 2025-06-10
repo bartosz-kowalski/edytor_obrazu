@@ -72,7 +72,7 @@ int main() {
 
 		if (ereaser)
 		{
-
+			
 		}
 
 		for (auto& bw : blocks) {
@@ -230,8 +230,9 @@ int main() {
 					int size = gauss->getSize();
 					float sizebuf;
 					float sigma = gauss->getSigma();
+					float sigmabuf;
 					size = GuiSlider({ 1110, (float)y, 150, 20 }, "Size", " ", &sizebuf, 0, 100);
-					sigma = GuiSlider({ 1110, (float)y + 40.0f, 150, 20 }, "Sigma", " ", &sigma, 0, 100);
+					sigma = GuiSlider({ 1110, (float)y + 40.0f, 150, 20 }, "Sigma", " ", &sigmabuf, 0, 100);
 					gauss->setSize(3 + static_cast<int>(sizebuf / 100 * 8));
 					gauss->setSigma(sigma / 20);
 					if (GuiButton({ 1110.0f, y + 80.0f, 150.0f, 30.0f }, "Process")) {
