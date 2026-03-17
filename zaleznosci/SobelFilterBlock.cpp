@@ -88,6 +88,12 @@ void SobelFilterBlock::sobel() {
 				g_val = (unsigned char)std::clamp(255.0f - g, 0.0f, 255.0f);
 			else
 				g_val = (unsigned char)std::clamp(g, 0.0f, 255.0f);
+			/*if ((int)g_val < this->edgeThresh) {
+				g_val = 0;
+			}
+			else {
+				g_val = 255;
+			}*/
 			output[y * width + x] = { g_val,g_val,g_val,255 };
 		}
 	}

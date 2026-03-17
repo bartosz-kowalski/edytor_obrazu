@@ -106,12 +106,12 @@ int main() {
 			blocks.erase(blocks.begin() + idx);
 			selectedBlock = nullptr;
 			
-			/*for (int i = 0; i < connections.size(); i++) {
+			for (int i = 0; i < connections.size(); i++) {
 				if (connections[i].idx_form == idx || connections[i].idx_to == idx) {
 					connections.erase(connections.begin() + i);
 					break;
 				}
-			}*/
+			}
 		}
 
 		for (auto& block : blocks) {
