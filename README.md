@@ -12,14 +12,14 @@ Aplikacja pozwala łączyć ze sobą różne **bloki przetwarzania obrazu**, kt�
 
 Każdy blok implementuje wspólny interfejs, dzięki czemu można je dowolnie mieszać.
 
-#Kompilacja
-##Systemy z rodziny linux: 
+# Kompilacja
+## Systemy z rodziny linux: 
 konieczna jest instalacja komilatora g++.
 ```bash
     make
     ./edytor_obrazu
 ```
-##Windows:
+## Windows:
 Wymagana jest instalacja MSVC. 
 ```bash
     mkdir build
