@@ -1,4 +1,4 @@
-#include "OutputBLock.hpp"
+#include "OutputBlock.hpp"
 
 void OutputBlock::saveImage() {
 
@@ -14,7 +14,7 @@ void OutputBlock::saveImage() {
 	}
 	else {
 		fail = 2;
-		printf("%s", "Brak pod³¹czonego wejœcia");
+		printf("%s", "Brak podÂ³Â¹czonego wejÂœcia");
 	}
 }
 

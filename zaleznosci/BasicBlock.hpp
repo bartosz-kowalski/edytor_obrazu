@@ -10,6 +10,7 @@
 #include <memory>
 #include <thread>
 #include <stack>
+#include <algorithm>
 
 enum class BlockType {
 	None,

@@ -1,4 +1,4 @@
-#include "zaleznosci/BasicBlock.hpp"
+#include "BasicBlock.hpp"
 
 struct Connection {
     std::shared_ptr<BasicBlock> from;
