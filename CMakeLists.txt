@@ -27,4 +27,9 @@ target_link_libraries(edytor_obrazu
      gdi32
      winmm)
 
+target_compile_definitions(edytor_obrazu PRIVATE
+    TEXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tekstury"
+)
+
+
 link_directories(raylib/lib)

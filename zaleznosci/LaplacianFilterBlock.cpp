@@ -26,7 +26,7 @@ void LaplacianFilterBlock::process() {
 	}
 	else {
 		fail = 2;
-		printf("%s", "Brak pod³¹czonego wejœcia");
+		printf("%s", "Brak podï¿½ï¿½czonego wejï¿½cia");
 	}
 }
 std::shared_ptr<Image> LaplacianFilterBlock::getOutput() {
@@ -116,22 +116,22 @@ BlockType LaplacianFilterBlock::getType() const {
 }
 
 void LaplacianFilterBlock::Draw() {
-
-	static Texture2D tekstura = LoadTexture("tekstury/Laplacian.png");
+	
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/Laplacian.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Laplacian.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/Laplacian.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/LaplacianGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/LaplacianGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/LaplacianSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/LaplacianSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:

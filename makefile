@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -O2 -Wall -Iraylib/include -Izaleznosci
+CXXFLAGS = -std=c++20 -O2 -Wall -Iraylib/include -Izaleznosci -DTEXTURES_DIR=\"$(CURDIR)/tekstury\"
 LDFLAGS = -Lraylib/lib -lraylib -lX11 -lXrandr -lXinerama -lXi -lXcursor -lGL -lrt -lpthread -ldl -lm
 
 SRC_MAIN = edytor_obrazu.cpp

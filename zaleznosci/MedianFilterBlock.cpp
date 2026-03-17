@@ -25,7 +25,7 @@ void MedianFilterBlock::process() {
 	}
 	else {
 		fail = 2;
-		printf("%s", "Brak pod³¹czonego wejœcia");
+		printf("%s", "Brak podï¿½ï¿½czonego wejï¿½cia");
 	}
 }
 std::shared_ptr<Image> MedianFilterBlock::getOutput() {
@@ -98,21 +98,21 @@ BlockType MedianFilterBlock::getType() const {
 
 void MedianFilterBlock::Draw() {
 
-	static Texture2D tekstura = LoadTexture("tekstury/Median.png");
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Median.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Median.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Median.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/MedianGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/MedianGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/MedianSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/MedianSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:

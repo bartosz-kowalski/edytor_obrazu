@@ -24,7 +24,7 @@ void SobelFilterBlock::process() {
 		fail = 1;
 	}
 	else {
-		printf("%s", "Brak pod³¹czonego wejœcia");
+		printf("%s", "Brak podï¿½ï¿½czonego wejï¿½cia");
 		fail = 2;
 	}
 }
@@ -127,21 +127,21 @@ BlockType SobelFilterBlock::getType() const {
 
 void SobelFilterBlock::Draw() {
 
-	static Texture2D tekstura = LoadTexture("tekstury/Sobel.png");
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Sobel.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Sobel.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Sobel.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/SobelGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/SobelGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/SobelSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/SobelSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:

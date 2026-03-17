@@ -57,21 +57,21 @@ BlockType OutputBlock::getType() const {
 
 void OutputBlock::Draw() {
 
-	static Texture2D tekstura = LoadTexture("tekstury/Output.png");
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Output.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Output.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Output.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/OutputGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/OutputGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/OutputSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/OutputSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:

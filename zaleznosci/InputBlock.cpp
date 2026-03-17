@@ -62,21 +62,21 @@ int InputBlock::getPrev() const {
 
 void InputBlock::Draw() {
 
-	static Texture2D tekstura = LoadTexture("tekstury/Input.png");
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/Input.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Input.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/Input.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/InputGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/InputGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/InputSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/InputSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:

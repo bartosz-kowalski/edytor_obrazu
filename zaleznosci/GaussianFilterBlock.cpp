@@ -25,7 +25,7 @@ void GaussianFilterBlock::process() {
 	}
 	else {
 		fail = 2;
-		printf("%s", "Brak pod³¹czonego wejœcia");
+		printf("%s", "Brak podï¿½ï¿½czonego wejï¿½cia");
 	}
 }
 std::shared_ptr<Image> GaussianFilterBlock::getOutput() {
@@ -136,21 +136,21 @@ BlockType GaussianFilterBlock::getType() const {
 
 void GaussianFilterBlock::Draw() {
 
-	static Texture2D tekstura = LoadTexture("tekstury/Gaussian.png");
+	static Texture2D tekstura = LoadTexture((std::string(TEXTURES_DIR) +"/Gaussian.png").c_str());
 	if (wasActive) {
 		switch (fail) {
 		case 0:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/Gaussian.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/Gaussian.png").c_str());
 			break;
 		case 1:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/GaussianGit.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/GaussianGit.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		case 2:
 			UnloadTexture(tekstura);
-			tekstura = LoadTexture("tekstury/GaussianSlabo.png");
+			tekstura = LoadTexture((std::string(TEXTURES_DIR) + "/GaussianSlabo.png").c_str());
 			std::thread(&BasicBlock::wait, this).detach();
 			break;
 		default:
